@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evangelos | Threat Research & Detection Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+            color: #c9d1d9;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(88, 166, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(88, 166, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(88, 166, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .glass-effect {
+            background: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(88, 166, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .neon-text {
+            background: linear-gradient(135deg, #58a6ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+        }
+        
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+        }
+        
+        .section {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            position: relative;
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #58a6ff, transparent);
+            opacity: 0.5;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            padding-bottom: 3rem;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover {
+            transform: translateX(10px);
+        }
+        
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 1.2rem;
+            height: 1.2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #58a6ff, #7c3aed);
+            box-shadow: 0 0 15px rgba(88, 166, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(88, 166, 255, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(88, 166, 255, 0.8); }
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 0.55rem;
+            top: 1.45rem;
+            bottom: -0.25rem;
+            width: 2px;
+            background: linear-gradient(180deg, #58a6ff, transparent);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .skill-card {
+            background: linear-gradient(135deg, rgba(22, 27, 34, 0.8), rgba(13, 17, 23, 0.9));
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(88, 166, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .skill-card:hover::before {
+            left: 100%;
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(88, 166, 255, 0.2);
+            border-color: #58a6ff;
+        }
+        
+        .project-card {
+            background: linear-gradient(135deg, rgba(22, 27, 34, 0.8), rgba(13, 17, 23, 0.9));
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(88, 166, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .project-card:hover::before {
+            left: 100%;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(88, 166, 255, 0.2);
+            border-color: #58a6ff;
+        }
+        
+        .vein {
+            height: 3px;
+            width: 0;
+            background: linear-gradient(90deg, #58a6ff, #7c3aed);
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.5);
+            transition: width 0.5s ease-in-out;
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+            border-radius: 2px;
+        }
+        
+        .project-card.active .vein {
+            width: 100%;
+        }
+        
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.6s ease-in-out, opacity 0.4s ease-in-out 0.2s;
+        }
+        
+        .project-card.active .card-content {
+            max-height: 300px;
+            opacity: 1;
+        }
+        
+        .logo-container {
+            height: 40px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .project-card:hover .logo-container {
+            transform: scale(1.1);
+        }
+        
+        .logo-container svg, .logo-container img {
+            max-height: 100%;
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(88, 166, 255, 0.3));
+        }
+        
+        /* Hero section enhancements */
+        .hero-title {
+            background: linear-gradient(135deg, #ffffff, #58a6ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            from { filter: drop-shadow(0 0 20px rgba(88, 166, 255, 0.3)); }
+            to { filter: drop-shadow(0 0 30px rgba(88, 166, 255, 0.6)); }
+        }
+        
+        /* Enhanced button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #58a6ff, #7c3aed);
+            border: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(88, 166, 255, 0.4);
+        }
+        
+        /* Social icons enhancement */
+        .social-icon {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 5px rgba(88, 166, 255, 0.3));
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-3px) scale(1.1);
+            filter: drop-shadow(0 0 15px rgba(88, 166, 255, 0.6));
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #58a6ff, #7c3aed);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #7c3aed, #58a6ff);
+        }
+        
+        /* Mobile responsiveness improvements */
+        @media (max-width: 768px) {
+            .section {
+                padding-top: 1.5rem;
+                padding-bottom: 1.5rem;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 glass-effect">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold font-fira neon-text hover:scale-105 transition-transform duration-300">&gt; Evangelos.site</a>
+            <div class="hidden md:flex space-x-8 items-center text-slate-400">
+                <a href="#focus" class="hover:text-blue-400 transition-all duration-300 hover:scale-105">Focus</a>
+                <a href="#progression" class="hover:text-blue-400 transition-all duration-300 hover:scale-105">Progression</a>
+                <a href="#interests" class="hover:text-blue-400 transition-all duration-300 hover:scale-105">Interests</a>
+                <a href="#contact" class="hover:text-blue-400 transition-all duration-300 hover:scale-105">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6">
+
+        <!-- Hero Section -->
+        <section class="min-h-[60vh] flex flex-col justify-center pt-16">
+            <div class="fade-in">
+                <h1 class="text-5xl md:text-7xl font-black tracking-tighter hero-title mb-6">Hey, I'm Evangelos.</h1>
+                <p class="mt-6 max-w-3xl text-xl text-gray-300 leading-relaxed">
+                    I'm a Threat Research and Detection Manager with a career that started in IT infrastructure and grew into a passion for cybersecurity and technology. I enjoy solving complex problems and leading high-performing teams by building efficient, automated environments they need to succeed.
+                </p>
+                <div class="mt-10 flex items-center space-x-8">
+                    <a href="mailto:evan.tzin@proton.me" class="text-gray-400 hover:text-white transition-all duration-300 social-icon">
+                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-all duration-300 social-icon">
+                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Professional Focus Section -->
+        <section id="focus" class="section fade-in">
+            <h2 class="text-4xl font-bold text-white tracking-tight mb-16 text-center font-fira neon-text">// Professional Focus</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="skill-card rounded-xl p-8">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg mb-6 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Threat Research & Detection</h3>
+                    <p class="text-gray-300 leading-relaxed">Leading threat research teams to proactively identify emerging threats, build robust detection capabilities, and enhance the security of enterprise-level products.</p>
+                </div>
+                <div class="skill-card rounded-xl p-8">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg mb-6 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Metrics & Data Analysis</h3>
+                    <p class="text-gray-300 leading-relaxed">Leveraging data to provide clear insights into performance and efficacy. Metrics show where you've been, where you are, and where you need to go.</p>
+                </div>
+                <div class="skill-card rounded-xl p-8">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg mb-6 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Automation & Efficiency</h3>
+                    <p class="text-gray-300 leading-relaxed">Identifying opportunities to automate critical workflows and reduce manual overhead, allowing technical teams to focus on strategic, high-value initiatives.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Career Progression Section -->
+        <section id="progression" class="section fade-in">
+            <h2 class="text-4xl font-bold text-white tracking-tight mb-16 text-center font-fira neon-text">// Career Progression</h2>
+            <div class="timeline max-w-4xl mx-auto">
+                <div class="timeline-item">
+                    <h3 class="text-2xl font-bold text-white mb-2">Engineering Manager - Threat Research & Detection</h3>
+                    <p class="text-lg text-blue-400 mb-3 font-medium">Cybersecurity | 2023-Present</p>
+                    <p class="text-gray-300 leading-relaxed">Leading and scaling a multi-functional threat research team, guiding technology roadmaps, and spearheading the development of automated detection systems.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 class="text-2xl font-bold text-white mb-2">Threat Researcher</h3>
+                    <p class="text-lg text-blue-400 mb-3 font-medium">Threat Research & Email Security | 2020-2023</p>
+                    <p class="text-gray-300 leading-relaxed">Specialized in proactive threat hunting, building custom detection signatures, and analyzing threat actor TTPs to enhance security posture.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 class="text-2xl font-bold text-white mb-2">Security & Support Analyst</h3>
+                    <p class="text-lg text-blue-400 mb-3 font-medium">Messaging Security | 2016-2020</p>
+                    <p class="text-gray-300 leading-relaxed">Progressed through roles providing expert-level product support, resolving complex technical issues, and conducting incident response.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 class="text-2xl font-bold text-white mb-2">IT Systems Administrator</h3>
+                    <p class="text-lg text-blue-400 mb-3 font-medium">Foundational IT | 2014-2016</p>
+                    <p class="text-gray-300 leading-relaxed">Managed the complete IT infrastructure for global organizations, gaining hands-on experience in server, network, and end-user administration.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personal Interests Section -->
+        <section id="interests" class="section fade-in">
+            <h2 class="text-4xl font-bold text-white tracking-tight mb-16 text-center font-fira neon-text">// Personal Interests</h2>
+            <div class="bg-gradient-to-br from-[#161b22] to-[#0d1117] rounded-2xl p-10 border border-gray-800 shadow-2xl">
+                <h3 class="text-3xl font-bold text-white mb-6">The Home Lab</h3>
+                <p class="text-gray-300 leading-relaxed mb-10 text-lg">
+                    Beyond my professional work, I'm passionate about hands-on technology exploration. My home lab is my personal proving ground for mastering tools and creating automations that improve my day-to-day life. It allows me to test new open-source solutions and keep up to date with emerging software, ensuring my strategic insights are always backed by practical, real-world experience.
+                </p>
+                <div id="toolkit-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Cards will be injected here by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <footer id="contact" class="text-center py-20">
+            <h2 class="text-4xl font-bold text-white tracking-tight mb-8">Get In Touch</h2>
+            <a href="mailto:evan.tzin@proton.me" class="btn-primary text-white font-bold py-5 px-10 rounded-xl transition-all duration-300 text-xl inline-block">
+                Say Hello
+            </a>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- Enhanced fade-in on scroll effect ---
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = { threshold: 0.15, rootMargin: "0px 0px -100px 0px" };
+        const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+        faders.forEach(fader => appearOnScroll.observe(fader));
+
+        // --- Enhanced Interactive Toolkit Logic ---
+        const toolkitGrid = document.getElementById('toolkit-grid');
+        const toolkitData = [
+            { 
+                name: 'OpnSense', 
+                description: 'An open-source firewall and routing platform that provides deep control over network security, traffic shaping, and intrusion detection.', 
+                url: 'https://opnsense.org/', 
+                logo: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>'
+            },
+            { 
+                name: 'Wazuh', 
+                description: 'An open-source security platform that offers unified SIEM and XDR capabilities, essential for maintaining visibility and control across a diverse IT landscape.', 
+                url: 'https://wazuh.com/', 
+                logo: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>'
+            },
+            { 
+                name: 'Proxmox', 
+                description: 'An open-source virtualization management platform. It\'s a core competency for building and managing efficient, scalable, and well-architected IT systems.', 
+                url: 'https://www.proxmox.com/en/', 
+                logo: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>'
+            },
+            { 
+                name: 'Portainer', 
+                description: 'A lightweight, open-source container management UI that simplifies the deployment and management of Docker containers.', 
+                url: 'https://www.portainer.io/', 
+                logo: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/></svg>'
+            },
+            { 
+                name: 'NextCloud', 
+                description: 'A self-hosted collaboration platform that provides a secure, private alternative to public cloud storage, demonstrating control over data and infrastructure.', 
+                url: 'https://nextcloud.com/', 
+                logo: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>'
+            },
+            { 
+                name: 'HomeAssistant', 
+                description: 'An open-source home automation platform that showcases advanced skills in system integration, IoT, and creating complex, event-driven automations.', 
+                url: 'https://www.home-assistant.io/', 
+                logo: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>'
+            },
+            { 
+                name: 'n8n', 
+                description: 'A workflow automation tool that allows for the creation of complex, interconnected workflows, demonstrating a strong ability to streamline processes.', 
+                url: 'https://n8n.io/', 
+                logo: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>'
+            }
+        ];
+
+        toolkitData.forEach(tool => {
+            const card = document.createElement('div');
+            card.className = 'project-card p-6 rounded-xl';
+            card.innerHTML = `
+                <div class="logo-container">
+                    ${tool.logo}
+                </div>
+                <h3 class="text-lg font-bold text-white pointer-events-none mb-3">${tool.name}</h3>
+                <div class="vein pointer-events-none"></div>
+                <div class="card-content pointer-events-none">
+                    <p class="text-gray-300 mb-6 leading-relaxed">${tool.description}</p>
+                    <a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="font-fira text-blue-400 hover:text-blue-300 hover:underline pointer-events-auto transition-colors duration-300">Visit Site &rarr;</a>
+                </div>
+            `;
+            toolkitGrid.appendChild(card);
+        });
+
+        toolkitGrid.addEventListener('click', function(e) {
+            const card = e.target.closest('.project-card');
+            if (!card) return;
+
+            if (card.classList.contains('active')) {
+                card.classList.remove('active');
+            } else {
+                toolkitGrid.querySelectorAll('.project-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            }
+        });
+
+        // --- Smooth scrolling for navigation links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
